@@ -29,16 +29,24 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.boot.flyway.autoconfigure.FlywayProperties;
+// FlywayProperties is now a local class in this package
 import org.springframework.boot.convert.DurationUnit;
 
 /**
- * Flyway模块化配置：locations和table参数特别需要注意，每个模块不能相同
+ * Per-module Flyway configuration. <p>Note that the {@code locations} and {@code table}
+ * properties must be unique across modules.</p>
+ *
  * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
  */
 @Getter
 @Setter
 @ToString
+/**
+ * <p>Auto-configuration for FlywayModularizedProperties.</p>
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
+ * @since 1.0.0
+ */
 public class FlywayModularizedProperties {
 	
 	private static final String DEFAULT_FLYWAY_MODULE_PATH = "classpath:db/migration/{module}/{vendor}";
@@ -342,6 +350,7 @@ public class FlywayModularizedProperties {
 
 	private final FlywayProperties.Sqlserver sqlserver = new FlywayProperties.Sqlserver();
 
+	/** @return return whether create data source is enabled. */
 	public boolean isCreateDataSource() {
 		return this.url != null || this.user != null;
 	}

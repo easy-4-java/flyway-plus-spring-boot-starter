@@ -29,16 +29,27 @@ import org.springframework.boot.jdbc.SchemaManagementProvider;
  * looking at available {@link Flyway} instances.
  *
  * @author Stephane Nicoll
+ * @since 1.0.0
  */
 public class FlywayModularizedSchemaManagementProvider implements SchemaManagementProvider {
 
 	private final Iterable<Flyway> flywayInstances;
 
+	/**
+	 * Constructs a provider backed by the given Flyway instances.
+	 * @param flywayInstances the Flyway instances to inspect
+	 */
 	public FlywayModularizedSchemaManagementProvider(Iterable<Flyway> flywayInstances) {
 		this.flywayInstances = flywayInstances;
 	}
 
+	/**
+	 * Returns whether the given data source is managed by any of the Flyway instances.
+	 * @param dataSource the data source to check
+	 * @return {@link SchemaManagement#MANAGED} if managed, otherwise {@link SchemaManagement#UNMANAGED}
+	 */
 	@Override
+	/** @return return the schema management. */
 	public SchemaManagement getSchemaManagement(DataSource dataSource) {
 		return StreamSupport.stream(this.flywayInstances.spliterator(), false)
 				.map((flyway) -> flyway.getConfiguration().getDataSource()).filter(dataSource::equals).findFirst()

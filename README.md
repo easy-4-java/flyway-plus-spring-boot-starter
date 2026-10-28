@@ -21,7 +21,7 @@
 
 ---
 
-> **Current Version**：`4.0.x.20260527-SNAPSHOT`<br>
+> **Current Version**：`4.1.x.20260527-SNAPSHOT`<br>
 > **JDK Baseline**：`17`<br>
 > **Group ID**：`io.github.easy4j`<br>
 > **Artifact ID**：`flyway-plus-spring-boot-starter`<br>
@@ -37,7 +37,7 @@
 | Consumers | Spring Boot applications using flyway-plus |
 | Core Capabilities | auto-configuration, property binding, ready-to-use beans for flyway-plus |
 | JDK | `17` |
-| Coordinates | `io.github.easy4j:flyway-plus-spring-boot-starter:4.0.x.20260527-SNAPSHOT` |
+| Coordinates | `io.github.easy4j:flyway-plus-spring-boot-starter:4.1.x.20260527-SNAPSHOT` |
 | Config Prefix | `flyway.plus` |
 
 ## 2. Core Capabilities
@@ -53,7 +53,7 @@
 | Dependency | Minimum | Evidence |
 |---|---:|---|
 | JDK | `17` | `pom.xml` |
-| Spring Boot | `4.0.1` | `pom.xml` parent |
+| Spring Boot | `4.1.0-M4` | `pom.xml` parent |
 | Maven | `3.6+` | Maven Enforcer |
 
 ## 4. Auto-configuration
@@ -79,7 +79,7 @@ Auto-configuration registration:
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>flyway-plus-spring-boot-starter</artifactId>
-    <version>4.0.x.20260527-SNAPSHOT</version>
+    <version>4.1.x.20260527-SNAPSHOT</version>
 </dependency>
 ```
 

@@ -21,7 +21,7 @@
 
 ---
 
-> **当前版本**：`4.0.x.20260527-SNAPSHOT`<br>
+> **当前版本**：`4.1.x.20260527-SNAPSHOT`<br>
 > **JDK 基线**：`17`<br>
 > **Group ID**：`io.github.easy4j`<br>
 > **Artifact ID**：`flyway-plus-spring-boot-starter`<br>
@@ -37,7 +37,7 @@
 | 消费方 | 使用 flyway-plus 的 Spring Boot 应用 |
 | 核心能力 | 自动装配、属性绑定、开箱即用的 flyway-plus Bean |
 | JDK | `17` |
-| 坐标 | `io.github.easy4j:flyway-plus-spring-boot-starter:4.0.x.20260527-SNAPSHOT` |
+| 坐标 | `io.github.easy4j:flyway-plus-spring-boot-starter:4.1.x.20260527-SNAPSHOT` |
 | 配置前缀 | `flyway.plus` |
 
 ## 2. 核心能力
@@ -53,7 +53,7 @@
 | 依赖 | 最低版本 | 证据来源 |
 |---|---:|---|
 | JDK | `17` | `pom.xml` |
-| Spring Boot | `4.0.1` | `pom.xml` parent |
+| Spring Boot | `4.1.0-M4` | `pom.xml` parent |
 | Maven | `3.6+` | Maven Enforcer |
 
 ## 4. 自动装配
@@ -79,7 +79,7 @@ Starter 自动装配以下 Bean：
 <dependency>
     <groupId>io.github.easy4j</groupId>
     <artifactId>flyway-plus-spring-boot-starter</artifactId>
-    <version>4.0.x.20260527-SNAPSHOT</version>
+    <version>4.1.x.20260527-SNAPSHOT</version>
 </dependency>
 ```
 
