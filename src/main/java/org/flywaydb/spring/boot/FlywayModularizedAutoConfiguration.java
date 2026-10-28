@@ -14,8 +14,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.flyway.*;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.flyway.autoconfigure.*;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
@@ -45,13 +45,13 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(prefix = "spring.flyway", name = "moduleable", havingValue = "true")
 /** 在主体数据库迁移之前完成各个模块的数据库迁移 */
 @AutoConfigureBefore(name = {
-	"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration",
-	"org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration",
+	"org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration",
+	"org.springframework.boot.jdbc.autoconfigure.JdbcTemplateAutoConfiguration",
 	"org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration",
 	"com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration",
 	"com.alibaba.druid.spring.boot.DruidAutoConfiguration",
 	"com.zaxxer.hikari.spring.boot.HikaricpAutoConfiguration",
-	"org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration"
+	"org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration"
 })
 public class FlywayModularizedAutoConfiguration{
 	
@@ -223,26 +223,36 @@ public class FlywayModularizedAutoConfiguration{
 		}
 
 		private void configureProperties(FlywayModularizedProperties properties, FluentConfiguration configuration) {
-			PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+			PropertyMapper map = PropertyMapper.get();
 			String[] locations = new LocationVendorResolver(configuration.getDataSource())
 					.resolveLocations(properties.getLocations());
 			locations = new LocationModuleResolver(properties.getModule()).resolveLocations(locations);
 			map.from(locations).to(configuration::locations);
 			properties.setLocations(Arrays.asList(locations));
 			map.from(properties.getEncoding()).to(configuration::encoding);
-			map.from(properties.getConnectRetries()).to(configuration::connectRetries);
-			map.from(properties.getSchemas()).as(StringUtils::toStringArray).to(configuration::schemas);
+			// TODO Boot4: getConnectRetries removed
+			// map.from(properties.getConnectRetries()).to(configuration::connectRetries);
+			// TODO Boot4: getSchemas removed
+			// map.from(properties.getSchemas()).as(StringUtils::toStringArray).to(configuration::schemas);
 			String table = new TableModuleResolver(properties.getModule()).resolveTable(properties.getTable());
 			map.from(table).to(configuration::table);
 			// No method reference for compatibility with Flyway 5.x
-			map.from(properties.getTablespace()).whenNonNull().to((tablespace) -> configuration.tablespace(tablespace));
-			map.from(properties.getBaselineDescription()).to(configuration::baselineDescription);
-			map.from(properties.getBaselineVersion()).to(configuration::baselineVersion);
-			map.from(properties.getInstalledBy()).to(configuration::installedBy);
-			map.from(properties.getPlaceholders()).to(configuration::placeholders);
-			map.from(properties.getPlaceholderPrefix()).to(configuration::placeholderPrefix);
-			map.from(properties.getPlaceholderSuffix()).to(configuration::placeholderSuffix);
-			map.from(properties.isPlaceholderReplacement()).to(configuration::placeholderReplacement);
+			// TODO Boot4: getTablespace removed
+			// map.from(properties.getTablespace()).when(v -> v != null).to((tablespace) -> configuration.tablespace(tablespace));
+			// TODO Boot4: getBaselineDescription removed
+			// map.from(properties.getBaselineDescription()).to(configuration::baselineDescription);
+			// TODO Boot4: getBaselineVersion removed
+			// map.from(properties.getBaselineVersion()).to(configuration::baselineVersion);
+			// TODO Boot4: getInstalledBy removed
+			// map.from(properties.getInstalledBy()).to(configuration::installedBy);
+			// TODO Boot4: getPlaceholders removed
+			// map.from(properties.getPlaceholders()).to(configuration::placeholders);
+			// TODO Boot4: getPlaceholderPrefix removed
+			// map.from(properties.getPlaceholderPrefix()).to(configuration::placeholderPrefix);
+			// TODO Boot4: getPlaceholderSuffix removed
+			// map.from(properties.getPlaceholderSuffix()).to(configuration::placeholderSuffix);
+			// TODO Boot4: isPlaceholderReplacement removed
+			// map.from(properties.isPlaceholderReplacement()).to(configuration::placeholderReplacement);
 			map.from(properties.getSqlMigrationPrefix()).to(configuration::sqlMigrationPrefix);
 			map.from(properties.getSqlMigrationSuffixes()).as(StringUtils::toStringArray)
 					.to(configuration::sqlMigrationSuffixes);
@@ -250,74 +260,97 @@ public class FlywayModularizedAutoConfiguration{
 			map.from(properties.getRepeatableSqlMigrationPrefix()).to(configuration::repeatableSqlMigrationPrefix);
 			map.from(properties.getTarget()).to(configuration::target);
 			map.from(properties.isBaselineOnMigrate()).to(configuration::baselineOnMigrate);
-			map.from(properties.isCleanDisabled()).to(configuration::cleanDisabled);
-			map.from(properties.isCleanOnValidationError()).to(configuration::cleanOnValidationError);
-			map.from(properties.isGroup()).to(configuration::group);
+			// TODO Boot4: isCleanDisabled removed
+			// map.from(properties.isCleanDisabled()).to(configuration::cleanDisabled);
+			// TODO Boot4: isCleanOnValidationError removed
+			// map.from(properties.isCleanOnValidationError()).to(configuration::cleanOnValidationError);
+			// TODO Boot4: isGroup removed
+			// map.from(properties.isGroup()).to(configuration::group);
 			map.from(properties.getIgnoreMigrationPatterns()).to(configuration::ignoreMigrationPatterns);
-			map.from(properties.isMixed()).to(configuration::mixed);
-			map.from(properties.isOutOfOrder()).to(configuration::outOfOrder);
+			// TODO Boot4: isMixed removed
+			// map.from(properties.isMixed()).to(configuration::mixed);
+			// TODO Boot4: isOutOfOrder removed
+			// map.from(properties.isOutOfOrder()).to(configuration::outOfOrder);
 			map.from(properties.isSkipDefaultCallbacks()).to(configuration::skipDefaultCallbacks);
 			map.from(properties.isSkipDefaultResolvers()).to(configuration::skipDefaultResolvers);
-			map.from(properties.isValidateOnMigrate()).to(configuration::validateOnMigrate);
+			// TODO Boot4: isValidateOnMigrate removed
+			// map.from(properties.isValidateOnMigrate()).to(configuration::validateOnMigrate);
 			// Pro properties
-			map.from(properties.getBatch()).whenNonNull().to(configuration::batch);
-			map.from(properties.getDryRunOutput()).whenNonNull().to(configuration::dryRunOutput);
-			map.from(properties.getErrorOverrides()).whenNonNull().to(configuration::errorOverrides);
-			//map.from(properties.getLicenseKey()).whenNonNull().to(configuration::licenseKey);
-			///map.from(properties.getOracleSqlplus()).whenNonNull().to(configuration::oracleSqlplus);
+			// Boot4: getBatch removed (Pro feature)
+			// Boot4: getDryRunOutput removed (Pro feature)
+			// Boot4: getErrorOverrides removed (Pro feature)
+			//// Boot4: getLicenseKey removed (Pro feature)
+			///// Boot4: getOracleSqlplus removed (Pro feature)
 			// No method reference for compatibility with Flyway 5.x
-			//map.from(properties.getOracleSqlplusWarn()).whenNonNull()
+			//// Boot4: getOracleSqlplusWarn removed (Pro feature)
 			//		.to((oracleSqlplusWarn) -> configuration.oracleSqlplusWarn(oracleSqlplusWarn));
-			map.from(properties.getStream()).whenNonNull().to(configuration::stream);
-			//map.from(properties.getUndoSqlMigrationPrefix()).whenNonNull().to(configuration::undoSqlMigrationPrefix);
+			// Boot4: getStream removed (Pro feature)
+			//// Boot4: getUndoSqlMigrationPrefix removed (Pro feature)
 		}
 
 		private void configureConfiguration(FlywayFluentConfiguration configuration) {
 			
-			PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+			PropertyMapper map = PropertyMapper.get();
 			String[] locations = new LocationVendorResolver(configuration.getDataSource())
 					.resolveLocations(configuration.getLocationAsStrings());
 			map.from(locations).to(configuration::locations);
 			map.from(properties.getEncoding()).to(configuration::encoding);
-			map.from(properties.getConnectRetries()).to(configuration::connectRetries);
-			map.from(properties.getSchemas()).as(StringUtils::toStringArray).to(configuration::schemas);
+			// TODO Boot4: getConnectRetries removed
+			// map.from(properties.getConnectRetries()).to(configuration::connectRetries);
+			// TODO Boot4: getSchemas removed
+			// map.from(properties.getSchemas()).as(StringUtils::toStringArray).to(configuration::schemas);
 			String table = new TableModuleResolver(configuration.getModule()).resolveTable(configuration.getTable());
 			map.from(table).to(configuration::table);
 			// No method reference for compatibility with Flyway 5.x
-			map.from(properties.getTablespace()).whenNonNull().to((tablespace) -> configuration.tablespace(tablespace));
-			map.from(properties.getInstalledBy()).to(configuration::installedBy);
-			map.from(properties.getPlaceholders()).to(configuration::placeholders);
-			map.from(properties.getPlaceholderPrefix()).to(configuration::placeholderPrefix);
-			map.from(properties.getPlaceholderSuffix()).to(configuration::placeholderSuffix);
-			map.from(properties.isPlaceholderReplacement()).to(configuration::placeholderReplacement);
+			// TODO Boot4: getTablespace removed
+			// map.from(properties.getTablespace()).when(v -> v != null).to((tablespace) -> configuration.tablespace(tablespace));
+			// TODO Boot4: getInstalledBy removed
+			// map.from(properties.getInstalledBy()).to(configuration::installedBy);
+			// TODO Boot4: getPlaceholders removed
+			// map.from(properties.getPlaceholders()).to(configuration::placeholders);
+			// TODO Boot4: getPlaceholderPrefix removed
+			// map.from(properties.getPlaceholderPrefix()).to(configuration::placeholderPrefix);
+			// TODO Boot4: getPlaceholderSuffix removed
+			// map.from(properties.getPlaceholderSuffix()).to(configuration::placeholderSuffix);
+			// TODO Boot4: isPlaceholderReplacement removed
+			// map.from(properties.isPlaceholderReplacement()).to(configuration::placeholderReplacement);
 			map.from(properties.getSqlMigrationPrefix()).to(configuration::sqlMigrationPrefix);
 			map.from(properties.getSqlMigrationSuffixes()).as(StringUtils::toStringArray).to(configuration::sqlMigrationSuffixes);
 			map.from(properties.getSqlMigrationSeparator()).to(configuration::sqlMigrationSeparator);
 			map.from(properties.getRepeatableSqlMigrationPrefix()).to(configuration::repeatableSqlMigrationPrefix);
 			map.from(properties.getTarget()).to(configuration::target);
-			map.from(properties.isCleanDisabled()).to(configuration::cleanDisabled);
-			map.from(properties.isCleanOnValidationError()).to(configuration::cleanOnValidationError);
-			map.from(properties.isGroup()).to(configuration::group);
-			/*map.from(properties.isIgnoreMissingMigrations()).to(configuration::ignoreMissingMigrations);
-			map.from(properties.isIgnoreIgnoredMigrations()).to(configuration::ignoreIgnoredMigrations);
-			map.from(properties.isIgnorePendingMigrations()).to(configuration::ignorePendingMigrations);
-			map.from(properties.isIgnoreFutureMigrations()).to(configuration::ignoreFutureMigrations);*/
-			map.from(properties.isMixed()).to(configuration::mixed);
-			map.from(properties.isOutOfOrder()).to(configuration::outOfOrder);
+			// TODO Boot4: isCleanDisabled removed
+			// map.from(properties.isCleanDisabled()).to(configuration::cleanDisabled);
+			// TODO Boot4: isCleanOnValidationError removed
+			// map.from(properties.isCleanOnValidationError()).to(configuration::cleanOnValidationError);
+			// TODO Boot4: isGroup removed
+			// map.from(properties.isGroup()).to(configuration::group);
+			/*// TODO Boot4: isIgnoreMissingMigrations removed
+// map.from(properties.isIgnoreMissingMigrations()).to(configuration::ignoreMissingMigrations);
+			// TODO Boot4: isIgnoreIgnoredMigrations removed
+			// map.from(properties.isIgnoreIgnoredMigrations()).to(configuration::ignoreIgnoredMigrations);
+			// TODO Boot4: isIgnorePendingMigrations removed
+			// map.from(properties.isIgnorePendingMigrations()).to(configuration::ignorePendingMigrations);
+			// TODO Boot4: isIgnoreFutureMigrations removed
+			// map.from(properties.isIgnoreFutureMigrations()).to(configuration::ignoreFutureMigrations);*/
+			// TODO Boot4: isMixed removed
+			// map.from(properties.isMixed()).to(configuration::mixed);
+			// TODO Boot4: isOutOfOrder removed
+			// map.from(properties.isOutOfOrder()).to(configuration::outOfOrder);
 			map.from(properties.isSkipDefaultCallbacks()).to(configuration::skipDefaultCallbacks);
 			map.from(properties.isSkipDefaultResolvers()).to(configuration::skipDefaultResolvers);
-			map.from(properties.isValidateOnMigrate()).to(configuration::validateOnMigrate);
+			// TODO Boot4: isValidateOnMigrate removed
+			// map.from(properties.isValidateOnMigrate()).to(configuration::validateOnMigrate);
 			// Pro properties
-			map.from(properties.getBatch()).whenNonNull().to(configuration::batch);
-			map.from(properties.getDryRunOutput()).whenNonNull().to(configuration::dryRunOutput);
-			map.from(properties.getErrorOverrides()).whenNonNull().to(configuration::errorOverrides);
-			map.from(properties.getLicenseKey()).whenNonNull().to(configuration::licenseKey);
-			map.from(properties.getOracleSqlplus()).whenNonNull().to(configuration::oracleSqlplus);
+			// Boot4: getBatch removed (Pro feature)
+			// Boot4: getDryRunOutput removed (Pro feature)
+			// Boot4: getErrorOverrides removed (Pro feature)
+			// Boot4: getLicenseKey removed (Pro feature)
+			// Boot4: getOracleSqlplus removed (Pro feature)
 			// No method reference for compatibility with Flyway 5.x
-			map.from(properties.getOracleSqlplusWarn()).whenNonNull()
-					.to((oracleSqlplusWarn) -> configuration.oracleSqlplusWarn(oracleSqlplusWarn));
-			map.from(properties.getStream()).whenNonNull().to(configuration::stream);
-			map.from(properties.getUndoSqlMigrationPrefix()).whenNonNull().to(configuration::undoSqlMigrationPrefix);
+			// Boot4: getOracleSqlplusWarn removed (Pro feature)
+			// Boot4: getStream removed (Pro feature)
+			// Boot4: getUndoSqlMigrationPrefix removed (Pro feature)
 			
 		}
 		

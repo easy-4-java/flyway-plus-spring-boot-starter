@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
+import org.springframework.boot.flyway.autoconfigure.FlywayMigrationStrategy;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
 
